@@ -1,11 +1,7 @@
 <template>
   <div id="app">
-    <hello-world msg="Welcome to Vue.JS Profiles"></hello-world>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
-
-    <users-list></users-list>
-    <users></users>
 
     <div id="users">
       <button @click="searchUsers" id="fetch-users" class="btn btn-primary">Fetch users</button>
@@ -23,8 +19,10 @@
       </div>
       <div class="mt-2">Result: {{ usersSorted.length }} / {{ allUsers.length }}</div>
 
-
-      <div class="singleProfile" @click="showUserModal">
+<!--      <User @click="" v-for="(u, index) in usersSorted" :key="index"-->
+<!--                 :value="u"></User>-->
+<!--      <Users></Users>-->
+      <div class="Users"  >
         <table id="tbl-users" class="table table-hover">
           <thead>
           <tr>
@@ -36,36 +34,37 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="u in usersSorted" :key="u">
-            <td><img :src='u.picture.thumbnail'/></td>
-            <td>{{u.name.first}} {{u.name.last}}</td>
-            <td>{{u.email}}</td>
-<!--            <td>{{u.id.value}}</td>-->
-            <td>{{u.phone}}</td>
-            <td>{{u.dob.age}}</td>
-          </tr>
+          <Users @click="showUserModal" v-for="(u, index) in usersSorted" :key="index"
+                     :value="u"></Users>
+<!--          <tr v-for="u in usersSorted" :key="u">-->
+<!--            <td><img :src='u.picture.thumbnail'/></td>-->
+<!--            <td>{{u.name.first}} {{u.name.last}}</td>-->
+<!--            <td>{{u.email}}</td>-->
+<!--            &lt;!&ndash;            <td>{{u.id.value}}</td>&ndash;&gt;-->
+<!--            <td>{{u.phone}}</td>-->
+<!--            <td>{{u.dob.age}}</td>-->
+<!--          </tr>-->
           </tbody>
         </table>
       </div>
+
     </div>
 
-    <userModal v-show="isModalVisible" @close="closeUserModal">
+    <UserModal v-show="isModalVisible" @close="closeUserModal">
 
-    </userModal>
+    </UserModal>
   </div>
 </template>
 
 <script>
-import UsersList from './components/UsersList.vue';
-import Users from './components/Users.vue';
+import UserModal from './components/UserModal.vue';
 import axios from "axios";
-import userModal from './components/userModal.vue';
+import Users from "./components/Users";
 
 export default {
   components: {
-    UsersList,
     Users,
-    userModal,
+    UserModal,
   },
 data(){
     return{
@@ -84,15 +83,6 @@ data(){
           }
   },
   computed: {
-    getNameIcon() {
-      return this.icons[this.sort.name];
-    },
-    getEmailIcon() {
-      return this.icons[this.sort.email];
-    },
-    getAgeIcon() {
-      return this.icons[this.sort.age];
-    },
     usersSorted() {
       return this.allUsers
               .slice(0)
@@ -132,8 +122,26 @@ data(){
                 return compare;
               }));
     },
+    getNameIcon() {
+      return this.icons[this.sort.name];
+    },
+    getEmailIcon() {
+      return this.icons[this.sort.email];
+    },
+    getAgeIcon() {
+      return this.icons[this.sort.age];
+    }
   },
   methods: {
+    async searchUsers() {
+      const {data: {results}} = await axios.get('https://randomuser.me/api/?results=150');
+
+      this.allUsers = results;
+    },
+    changeSort(type) {
+      this.sort[type]++;
+      if (this.sort[type] > 2) this.sort[type] = 0;
+    },
     showUserModal(){
       this.isModalVisible = true;
       // this.loadUserDetails(id);
@@ -144,15 +152,6 @@ data(){
     // loadUserDetails(id){
     //   alert(id);
     // },
-    changeSort(type) {
-      this.sort[type]++;
-      if (this.sort[type] > 2) this.sort[type] = 0;
-    },
-    async searchUsers() {
-      const {data: {results}} = await axios.get('https://randomuser.me/api/?results=150');
-
-      this.allUsers = results;
-    },
   },
 }
 </script>
@@ -167,18 +166,5 @@ data(){
   margin-top: 60px;
 }
 
-th {
-  cursor: pointer;
-  user-select: none;
-}
-
-input + label {
-  margin: 0 6px;
-  color: rgba(0, 0, 0, .5);
-}
-
-input:checked + label {
-  color: black;
-}
 
 </style>

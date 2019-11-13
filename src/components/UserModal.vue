@@ -1,6 +1,6 @@
 <script>
     export default {
-        name: 'userModal',
+        name: 'UserModal',
         methods: {
             close() {
                 this.$emit('close');
@@ -19,7 +19,7 @@
 <template>
     <transition name="modal-fade">
         <div class="modal-backdrop">
-            <div class="userModal"
+            <div class="UserModal"
                  role="dialog"
                  aria-labelledby="modalTitle"
                  aria-describedby="modalDescription"
@@ -82,7 +82,7 @@
         align-items: center;
     }
 
-    .userModal {
+    .UserModal {
         background: #FFFFFF;
         box-shadow: 2px 2px 20px 1px;
         overflow-x: auto;
