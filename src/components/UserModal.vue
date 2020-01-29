@@ -1,6 +1,11 @@
 <script>
     export default {
         name: 'UserModal',
+        props: {
+            user: {
+                type: Object,
+            }
+        },
         methods: {
             close() {
                 this.$emit('close');
@@ -29,7 +34,7 @@
                         id="modalTitle"
                 >
                     <slot name="header">
-                        User Profile
+                        <b>User Profile</b>
 
                         <button
                                 type="button"
@@ -46,7 +51,22 @@
                         id="modalDescription"
                 >
                     <slot name="body">
-<!--                        {{ loadUserDetails(u.id.value) }}-->
+                        <img class="avatar" :src="user.picture.large"/>
+                        <div class="profileCard">
+                                <div class="profileDetail">
+                                    <b>First name:</b> {{ user.name.first }}<br>
+                                    <b>Last name:</b> {{ user.name.last }}<br>
+                                    <b>Email:</b> {{ user.email }}<br>
+                                    <b>Phone:</b> {{ user.phone }}<br>
+                                    <b>City:</b> {{ user.location.city }}<br>
+                                    <b>Country:</b> {{ user.location.country }}<br>
+                            </div>
+                        </div>
+                    </slot>
+                    <slot name="map">
+                        <div class="mapFrame">
+
+                        </div>
                     </slot>
                 </section>
                 <footer class="modal-footer">
@@ -69,6 +89,22 @@
 </template>
 
 <style>
+    .profileCard {
+        position: relative;
+        display: flex;
+        /*padding: 30px;*/
+
+    }
+    .profileDetail {
+        padding: 30px;
+        text-align: left
+    }
+    .avatar {
+        position: relative;
+        display: flex;
+        margin-left: 30px;
+        margin-top: 30px;
+    }
     .modal-backdrop {
         position: relative;
         top: 0;

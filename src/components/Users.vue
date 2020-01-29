@@ -1,5 +1,4 @@
 <template>
-    <div>
         <tr @click="click">
             <td><img :src='value.picture.thumbnail'/></td>
             <td>{{value.name.first}} {{value.name.last}}</td>
@@ -7,7 +6,6 @@
             <td>{{value.phone}}</td>
             <td>{{value.dob.age}}</td>
         </tr>
-    </div>
 </template>
 
 <script>
